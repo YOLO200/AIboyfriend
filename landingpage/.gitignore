@@ -1,3 +1,4 @@
 node_modules/
 waitlist.db
 .env
+package-lock.json

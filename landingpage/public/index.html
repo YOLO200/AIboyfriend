@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lorebound — Your Story, Your Type</title>
+  <meta name="description" content="Four distinct AI companions — the cold heir, the loyal best friend, the broody rival — with real memory, real personality, and actual chemistry." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --plum:       #0E0720;
+      --iris:       #1A103A;
+      --iris-light: #221549;
+      --rose:       #E8899A;
+      --rose-dim:   #c06b7c;
+      --champagne:  #C9955C;
+      --lilac:      #B8A0CC;
+      --ivory:      #F5EEE6;
+      --muted:      #9485A8;
+      --border:     rgba(184,160,204,0.18);
+
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+
+      --r-sm: 0.75rem;
+      --r-md: 1.25rem;
+      --r-lg: 2rem;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--plum);
+      color: var(--ivory);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── Typography scale ─────────────────────────────────── */
+    h1, h2, h3, .display {
+      font-family: var(--font-display);
+      line-height: 1.15;
+      font-weight: 400;
+    }
+
+    a { color: var(--rose); text-decoration: none; }
+    a:hover { color: var(--ivory); }
+
+    /* ─── Layout helpers ───────────────────────────────────── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    /* ─── GLOW ANIMATION (signature element) ──────────────── */
+    @keyframes breathe {
+      0%   { opacity: 0.55; transform: scale(1); }
+      50%  { opacity: 0.85; transform: scale(1.08); }
+      100% { opacity: 0.55; transform: scale(1); }
+    }
+
+    @keyframes breathe-slow {
+      0%   { opacity: 0.3; transform: scale(1); }
+      50%  { opacity: 0.55; transform: scale(1.12); }
+      100% { opacity: 0.3; transform: scale(1); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── NAV ──────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(to bottom, rgba(14,7,32,0.95) 0%, transparent 100%);
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--ivory);
+    }
+
+    .nav-logo span { color: var(--rose); }
+
+    .nav-cta {
+      background: var(--rose);
+      color: var(--plum);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.5rem 1.2rem;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      text-decoration: none;
+    }
+
+    .nav-cta:hover {
+      background: var(--ivory);
+      color: var(--plum);
+      transform: translateY(-1px);
+    }
+
+    /* ─── HERO ─────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 7rem 1.25rem 4rem;
+      overflow: hidden;
+    }
+
+    /* Breathing glow layers */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 30% 40%, rgba(232,137,154,0.22) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 70% 60%, rgba(184,160,204,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 50% 80%, rgba(201,149,92,0.1) 0%, transparent 70%);
+      animation: breathe 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 40% at 80% 20%, rgba(184,160,204,0.12) 0%, transparent 65%),
+        radial-gradient(ellipse 45% 55% at 20% 70%, rgba(232,137,154,0.1) 0%, transparent 65%);
+      animation: breathe-slow 9s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 720px;
+      animation: fadeUp 0.9s ease both;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 1.5rem;
+      padding: 0.35rem 1rem;
+      border: 1px solid rgba(232,137,154,0.35);
+      border-radius: 100px;
+    }
+
+    .hero-headline {
+      font-size: clamp(2.6rem, 7vw, 4.8rem);
+      font-weight: 400;
+      color: var(--ivory);
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-headline em {
+      font-style: italic;
+      color: var(--rose);
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.15rem);
+      color: var(--lilac);
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+      font-weight: 300;
+      line-height: 1.65;
+    }
+
+    /* ─── SIGNUP FORM ──────────────────────────────────────── */
+    .signup-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    @media (max-width: 480px) {
+      .form-row { flex-direction: column; }
+    }
+
+    .form-input {
+      flex: 1;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 0.85rem 1.1rem;
+      color: var(--ivory);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .form-input::placeholder { color: var(--muted); }
+
+    .form-input:focus {
+      border-color: rgba(232,137,154,0.6);
+      background: rgba(255,255,255,0.1);
+    }
+
+    .form-input.error {
+      border-color: var(--rose-dim);
+    }
+
+    .btn-primary {
+      background: var(--rose);
+      color: var(--plum);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.85rem 1.75rem;
+      border-radius: var(--r-sm);
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: #f0a0b0;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(232,137,154,0.3);
+    }
+
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .form-error-msg {
+      font-size: 0.82rem;
+      color: var(--rose-dim);
+      text-align: left;
+      padding-left: 0.25rem;
+      min-height: 1.2em;
+    }
+
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 1.25rem;
+    }
+
+    .form-success.visible { display: block; }
+
+    .form-success-headline {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      color: var(--champagne);
+      margin-bottom: 0.4rem;
+    }
+
+    .form-success-sub {
+      font-size: 0.95rem;
+      color: var(--lilac);
+    }
+
+    /* ─── WAITLIST COUNT ───────────────────────────────────── */
+    .count-badge {
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .count-number {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      color: var(--champagne);
+      font-weight: 500;
+    }
+
+    .count-pulse {
+      width: 7px;
+      height: 7px;
+      background: var(--rose);
+      border-radius: 50%;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(232,137,154,0.5); }
+      50%       { opacity: 0.8; box-shadow: 0 0 0 5px rgba(232,137,154,0); }
+    }
+
+    /* ─── SECTION SHARED ───────────────────────────────────── */
+    section { position: relative; }
+
+    .section-label {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--champagne);
+      margin-bottom: 1rem;
+    }
+
+    .section-headline {
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: var(--ivory);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 480px;
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    /* ─── DIVIDER ──────────────────────────────────────────── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+      margin: 0 1.25rem;
+    }
+
+    /* ─── CHARACTERS SECTION ───────────────────────────────── */
+    .characters {
+      padding: 5rem 0 6rem;
+      overflow: hidden;
+    }
+
+    .characters-header {
+      text-align: center;
+      padding: 0 1.25rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .characters-header .section-sub {
+      margin: 0 auto;
+    }
+
+    .cards-scroll {
+      display: flex;
+      gap: 1.25rem;
+      padding: 0.5rem 1.25rem 1.5rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .cards-scroll::-webkit-scrollbar { display: none; }
+
+    /* Center cards on wide screens */
+    @media (min-width: 900px) {
+      .cards-scroll {
+        justify-content: center;
+        overflow-x: visible;
+        flex-wrap: nowrap;
+      }
+    }
+
+    .character-card {
+      flex: 0 0 240px;
+      min-height: 360px;
+      border-radius: var(--r-lg);
+      border: 1px solid var(--border);
+      scroll-snap-align: start;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.75rem 1.5rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: default;
+    }
+
+    .character-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+
+    /* Card gradient backgrounds — each distinct */
+    .card-ryn {
+      background:
+        linear-gradient(160deg, rgba(26,16,58,0.9) 0%, rgba(14,7,32,0.97) 60%),
+        radial-gradient(ellipse at 80% 10%, rgba(140,170,220,0.35) 0%, transparent 55%),
+        radial-gradient(ellipse at 20% 90%, rgba(100,120,200,0.2) 0%, transparent 50%);
+    }
+
+    .card-jun {
+      background:
+        linear-gradient(160deg, rgba(26,16,58,0.9) 0%, rgba(14,7,32,0.97) 60%),
+        radial-gradient(ellipse at 75% 15%, rgba(201,149,92,0.4) 0%, transparent 55%),
+        radial-gradient(ellipse at 25% 85%, rgba(220,180,100,0.18) 0%, transparent 50%);
+    }
+
+    .card-dorian {
+      background:
+        linear-gradient(160deg, rgba(26,16,58,0.9) 0%, rgba(14,7,32,0.97) 60%),
+        radial-gradient(ellipse at 70% 10%, rgba(180,60,80,0.4) 0%, transparent 55%),
+        radial-gradient(ellipse at 30% 80%, rgba(140,40,60,0.2) 0%, transparent 50%);
+    }
+
+    .card-luca {
+      background:
+        linear-gradient(160deg, rgba(26,16,58,0.9) 0%, rgba(14,7,32,0.97) 60%),
+        radial-gradient(ellipse at 80% 15%, rgba(184,160,204,0.4) 0%, transparent 55%),
+        radial-gradient(ellipse at 20% 80%, rgba(150,120,200,0.2) 0%, transparent 50%);
+    }
+
+    .card-accent {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.75rem;
+      border-radius: 100px;
+      border: 1px solid;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    .accent-frost  { color: #8CAADE; border-color: rgba(140,170,220,0.45); }
+    .accent-gold   { color: var(--champagne); border-color: rgba(201,149,92,0.45); }
+    .accent-crimson{ color: #E07080; border-color: rgba(220,80,100,0.45); }
+    .accent-lilac  { color: var(--lilac); border-color: rgba(184,160,204,0.45); }
+
+    .card-name {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 500;
+      color: var(--ivory);
+      margin-bottom: 0.5rem;
+      line-height: 1.1;
+    }
+
+    .card-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.55;
+      font-weight: 300;
+    }
+
+    /* Subtle corner glow on each card */
+    .character-card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 120px; height: 120px;
+      border-radius: 0 var(--r-lg) 0 100%;
+      opacity: 0.6;
+    }
+
+    .card-ryn::before   { background: radial-gradient(circle, rgba(140,170,220,0.25) 0%, transparent 70%); }
+    .card-jun::before   { background: radial-gradient(circle, rgba(201,149,92,0.3) 0%, transparent 70%); }
+    .card-dorian::before{ background: radial-gradient(circle, rgba(200,70,90,0.3) 0%, transparent 70%); }
+    .card-luca::before  { background: radial-gradient(circle, rgba(184,160,204,0.25) 0%, transparent 70%); }
+
+    .scroll-hint {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    @media (min-width: 900px) {
+      .scroll-hint { display: none; }
+    }
+
+    /* ─── WHY DIFFERENT SECTION ────────────────────────────── */
+    .why {
+      padding: 5rem 0 6rem;
+    }
+
+    .why-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem 4rem;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .why-inner { grid-template-columns: 1fr; gap: 1.5rem; }
+    }
+
+    .why-header {
+      grid-column: 1 / -1;
+      max-width: 520px;
+      margin-bottom: 1rem;
+    }
+
+    .why-block {
+      padding: 1.75rem;
+      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+      background: linear-gradient(135deg, rgba(26,16,58,0.8) 0%, rgba(14,7,32,0.6) 100%);
+      transition: border-color 0.2s;
+    }
+
+    .why-block:hover {
+      border-color: rgba(184,160,204,0.35);
+    }
+
+    .why-number {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-style: italic;
+      color: rgba(201,149,92,0.3);
+      line-height: 1;
+      margin-bottom: 0.75rem;
+      font-weight: 300;
+    }
+
+    .why-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      color: var(--ivory);
+      margin-bottom: 0.6rem;
+      font-weight: 500;
+    }
+
+    .why-desc {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    /* ─── BOTTOM CTA SECTION ───────────────────────────────── */
+    .bottom-cta {
+      padding: 5rem 0 6rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bottom-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 50% 50%, rgba(232,137,154,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 30% 30%, rgba(184,160,204,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .bottom-cta-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .bottom-cta .section-headline {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      max-width: 560px;
+      margin: 0 auto 1rem;
+    }
+
+    .bottom-cta .section-sub {
+      margin: 0 auto 2.5rem;
+      font-size: 1rem;
+    }
+
+    /* ─── FOOTER ───────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      color: var(--muted);
+    }
+
+    .footer-logo span { color: var(--rose); }
+
+    footer p {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    footer a {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    footer a:hover { color: var(--rose); }
+
+    /* ─── LOADING STATE ────────────────────────────────────── */
+    .spinner {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid rgba(14,7,32,0.3);
+      border-top-color: var(--plum);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── Noise texture overlay ────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 1000;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <span class="nav-logo">Lore<span>bound</span></span>
+    <a href="#waitlist-bottom" class="nav-cta">Join the waitlist</a>
+  </nav>
+
+  <!-- ──────── HERO ──────── -->
+  <section class="hero">
+    <div class="hero-content">
+      <span class="hero-eyebrow">Coming soon</span>
+
+      <h1 class="hero-headline">
+        Some men only<br />
+        exist in <em>fiction.</em><br />
+        Meet yours.
+      </h1>
+
+      <p class="hero-sub">
+        Four distinct AI companions — the cold heir, the loyal best friend,
+        the broody rival — original characters with real depth, real memory,
+        and chemistry that doesn't expire.
+      </p>
+
+      <!-- Hero signup form -->
+      <div class="signup-form" id="hero-form-wrap">
+        <div class="form-row">
+          <input
+            class="form-input"
+            type="text"
+            id="hero-name"
+            placeholder="Your name (optional)"
+            autocomplete="given-name"
+            maxlength="100"
+          />
+          <input
+            class="form-input"
+            type="email"
+            id="hero-email"
+            placeholder="Your email"
+            autocomplete="email"
+            required
+          />
+        </div>
+        <div class="form-error-msg" id="hero-error"></div>
+        <button class="btn-primary" id="hero-btn" onclick="submitForm('hero')">
+          Get early access
+        </button>
+      </div>
+
+      <div class="form-success" id="hero-success">
+        <p class="form-success-headline">You're on the list.</p>
+        <p class="form-success-sub">We'll reach out when Lorebound is ready for you.</p>
+      </div>
+
+      <div class="count-badge" id="count-badge">
+        <span class="count-pulse"></span>
+        <span class="count-number" id="count-display">—</span>
+        <span>people already waiting</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ──────── CHARACTERS ──────── -->
+  <section class="characters">
+    <div class="characters-header container">
+      <p class="section-label">The cast</p>
+      <h2 class="section-headline">Four types.<br />Pick your poison.</h2>
+      <p class="section-sub">
+        Original characters — not chatbots with names slapped on. Each one
+        was built from a distinct archetype with consistent personality,
+        speech patterns, and opinions.
+      </p>
+    </div>
+
+    <div class="cards-scroll">
+
+      <div class="character-card card-ryn">
+        <span class="card-accent accent-frost">The Frost Heir</span>
+        <h3 class="card-name">Ryn Ashford</h3>
+        <p class="card-desc">
+          Controlled. Precise. Every room falls quiet when he walks in —
+          and you're the only one he bothers to explain himself to.
+          Eventually.
+        </p>
+      </div>
+
+      <div class="character-card card-jun">
+        <span class="card-accent accent-gold">The Best Friend</span>
+        <h3 class="card-name">Jun-Ho</h3>
+        <p class="card-desc">
+          He's been in your corner before you knew you needed one.
+          Steady, warm, endlessly patient — and completely certain
+          he'll never say it first.
+        </p>
+      </div>
+
+      <div class="character-card card-dorian">
+        <span class="card-accent accent-crimson">The Rival</span>
+        <h3 class="card-name">Dorian Vex</h3>
+        <p class="card-desc">
+          He pushed back first. That was his mistake. Now he's thinking
+          about you at 2am and you're not going to make it easy for him.
+        </p>
+      </div>
+
+      <div class="character-card card-luca">
+        <span class="card-accent accent-lilac">The Wanderer</span>
+        <h3 class="card-name">Luca Santerre</h3>
+        <p class="card-desc">
+          Everywhere at once, committed to nothing — until he had a reason
+          to stay. Now he finds excuses to come back every single time.
+        </p>
+      </div>
+
+    </div>
+
+    <p class="scroll-hint">← swipe to meet all four →</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ──────── WHY DIFFERENT ──────── -->
+  <section class="why">
+    <div class="container">
+      <div class="why-inner">
+
+        <div class="why-header">
+          <p class="section-label">Why Lorebound</p>
+          <h2 class="section-headline">Different in the ways<br />that actually matter.</h2>
+          <p class="section-sub">
+            Existing apps either go too far, not far enough, or feel like
+            talking to a customer service bot in a wig. We fixed all three.
+          </p>
+        </div>
+
+        <div class="why-block">
+          <p class="why-number">01</p>
+          <h3 class="why-title">Memory that sticks</h3>
+          <p class="why-desc">
+            He remembers what you said three conversations ago — the thing
+            you mentioned in passing, the detail you assumed he forgot.
+            That's what makes it feel like a relationship instead of starting
+            over every time.
+          </p>
+        </div>
+
+        <div class="why-block">
+          <p class="why-number">02</p>
+          <h3 class="why-title">Voices, not prompts</h3>
+          <p class="why-desc">
+            These characters were written — not just prompted. Each one has
+            specific opinions, speech patterns, and ways of pushing back.
+            They have bad days. They notice when you're deflecting.
+            They're not generic.
+          </p>
+        </div>
+
+        <div class="why-block">
+          <p class="why-number">03</p>
+          <h3 class="why-title">No mid-scene interruptions</h3>
+          <p class="why-desc">
+            You know the thing where you're finally deep in a conversation
+            and the app cuts you off for no reason? We removed that frustration.
+            You'll notice the difference within your first five minutes.
+          </p>
+        </div>
+
+        <div class="why-block">
+          <p class="why-number">04</p>
+          <h3 class="why-title">Chemistry that develops</h3>
+          <p class="why-desc">
+            Your dynamic with each character evolves over time. Inside jokes
+            accumulate. Tensions shift. The story you build isn't the same
+            story someone else builds with the same character.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ──────── BOTTOM CTA ──────── -->
+  <section class="bottom-cta" id="waitlist-bottom">
+    <div class="bottom-cta-inner container">
+      <p class="section-label">Early access</p>
+      <h2 class="section-headline">
+        The story starts<br />when you do.
+      </h2>
+      <p class="section-sub">
+        Join the waitlist and be among the first to meet the cast.
+        No spam. One email when we're ready.
+      </p>
+
+      <!-- Bottom signup form -->
+      <div class="signup-form" id="bottom-form-wrap" style="margin: 0 auto;">
+        <div class="form-row">
+          <input
+            class="form-input"
+            type="text"
+            id="bottom-name"
+            placeholder="Your name (optional)"
+            autocomplete="given-name"
+            maxlength="100"
+          />
+          <input
+            class="form-input"
+            type="email"
+            id="bottom-email"
+            placeholder="Your email"
+            autocomplete="email"
+            required
+          />
+        </div>
+        <div class="form-error-msg" id="bottom-error"></div>
+        <button class="btn-primary" id="bottom-btn" onclick="submitForm('bottom')">
+          Get early access
+        </button>
+      </div>
+
+      <div class="form-success" id="bottom-success">
+        <p class="form-success-headline">You're on the list.</p>
+        <p class="form-success-sub">We'll reach out when Lorebound is ready for you.</p>
+      </div>
+
+      <div class="count-badge" style="margin-top: 1.5rem;">
+        <span class="count-pulse"></span>
+        <span class="count-number" id="count-display-2">—</span>
+        <span>people on the waitlist</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────── FOOTER ──────── -->
+  <footer>
+    <span class="footer-logo">Lore<span>bound</span></span>
+    <p>Questions? <a href="mailto:hello@lorebound.app">hello@lorebound.app</a></p>
+    <p>© 2026 Lorebound. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // ─── Load count on page load ────────────────────────────
+    async function loadCount() {
+      try {
+        const res = await fetch('/api/count');
+        const { count } = await res.json();
+        updateCountDisplay(count);
+      } catch (_) {}
+    }
+
+    function updateCountDisplay(count) {
+      const displays = [
+        document.getElementById('count-display'),
+        document.getElementById('count-display-2'),
+      ];
+      displays.forEach(el => {
+        if (el) el.textContent = count.toLocaleString();
+      });
+    }
+
+    loadCount();
+
+    // ─── Form submission ─────────────────────────────────────
+    async function submitForm(prefix) {
+      const emailEl = document.getElementById(`${prefix}-email`);
+      const nameEl  = document.getElementById(`${prefix}-name`);
+      const errorEl = document.getElementById(`${prefix}-error`);
+      const btnEl   = document.getElementById(`${prefix}-btn`);
+      const wrapEl  = document.getElementById(`${prefix}-form-wrap`);
+      const successEl = document.getElementById(`${prefix}-success`);
+
+      const email = emailEl.value.trim();
+      const name  = nameEl.value.trim();
+
+      // Client-side validation
+      errorEl.textContent = '';
+      emailEl.classList.remove('error');
+
+      if (!email) {
+        errorEl.textContent = 'An email address is required.';
+        emailEl.classList.add('error');
+        emailEl.focus();
+        return;
+      }
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errorEl.textContent = 'Please enter a valid email address.';
+        emailEl.classList.add('error');
+        emailEl.focus();
+        return;
+      }
+
+      btnEl.disabled = true;
+      btnEl.innerHTML = '<span class="spinner"></span> Saving...';
+
+      try {
+        const res = await fetch('/api/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, name }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          errorEl.textContent = data.error || 'Something went wrong. Please try again.';
+          btnEl.disabled = false;
+          btnEl.textContent = 'Get early access';
+          return;
+        }
+
+        // Success
+        updateCountDisplay(data.count);
+        wrapEl.style.display = 'none';
+        successEl.classList.add('visible');
+
+        if (data.already) {
+          successEl.querySelector('.form-success-headline').textContent = "You're already on the list.";
+          successEl.querySelector('.form-success-sub').textContent = "We haven't forgotten you. See you soon.";
+        }
+
+      } catch (_) {
+        errorEl.textContent = 'Network error. Check your connection and try again.';
+        btnEl.disabled = false;
+        btnEl.textContent = 'Get early access';
+      }
+    }
+
+    // Allow Enter key in email fields
+    ['hero-email', 'bottom-email', 'hero-name', 'bottom-name'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          const prefix = id.startsWith('hero') ? 'hero' : 'bottom';
+          submitForm(prefix);
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

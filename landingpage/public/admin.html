@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lorebound — Waitlist Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --plum: #0E0720;
+      --iris: #1A103A;
+      --rose: #E8899A;
+      --champagne: #C9955C;
+      --lilac: #B8A0CC;
+      --ivory: #F5EEE6;
+      --muted: #9485A8;
+      --border: rgba(184,160,204,0.18);
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+    }
+
+    body {
+      background: var(--plum);
+      color: var(--ivory);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.5;
+      min-height: 100vh;
+      padding: 2rem 1.5rem;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      color: var(--ivory);
+    }
+
+    .logo span { color: var(--rose); }
+
+    .admin-badge {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0.3rem 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-card {
+      background: var(--iris);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.25rem 1.5rem;
+      min-width: 160px;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 2.4rem;
+      color: var(--champagne);
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-input {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 0.55rem 1rem;
+      color: var(--ivory);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      outline: none;
+      width: 260px;
+      transition: border-color 0.2s;
+    }
+
+    .search-input::placeholder { color: var(--muted); }
+    .search-input:focus { border-color: rgba(232,137,154,0.5); }
+
+    .btn-sm {
+      background: var(--iris);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 0.55rem 1rem;
+      color: var(--ivory);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-sm:hover {
+      border-color: var(--lilac);
+      background: rgba(184,160,204,0.12);
+    }
+
+    .count-label {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-left: auto;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    thead th {
+      background: var(--iris);
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+    tbody td {
+      padding: 0.75rem 1rem;
+      color: var(--ivory);
+      vertical-align: middle;
+    }
+
+    .td-id    { color: var(--muted); width: 50px; }
+    .td-email { font-weight: 400; }
+    .td-name  { color: var(--lilac); }
+    .td-date  { color: var(--muted); font-size: 0.82rem; white-space: nowrap; }
+
+    .empty-row td {
+      text-align: center;
+      color: var(--muted);
+      padding: 3rem;
+      font-style: italic;
+    }
+
+    #loading-row td {
+      text-align: center;
+      color: var(--muted);
+      padding: 2rem;
+    }
+
+    .download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      color: var(--champagne);
+      text-decoration: none;
+    }
+
+    .download-link:hover { color: var(--ivory); }
+
+    footer {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    footer p { font-size: 0.78rem; color: var(--muted); }
+    footer a { color: var(--muted); font-size: 0.78rem; }
+    footer a:hover { color: var(--rose); }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <div class="logo">Lore<span>bound</span></div>
+    </div>
+    <span class="admin-badge">Waitlist Admin</span>
+  </header>
+
+  <div class="stats">
+    <div class="stat-card">
+      <p class="stat-label">Total signups</p>
+      <p class="stat-value" id="total-count">—</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">Showing</p>
+      <p class="stat-value" id="filtered-count">—</p>
+    </div>
+  </div>
+
+  <div class="controls">
+    <input
+      type="search"
+      class="search-input"
+      id="search"
+      placeholder="Search by email or name…"
+    />
+    <button class="btn-sm" onclick="loadData()">↻ Refresh</button>
+    <button class="btn-sm" id="export-btn" onclick="exportCSV()">Export CSV</button>
+    <span class="count-label" id="last-updated"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="td-id">#</th>
+          <th>Email</th>
+          <th>Name</th>
+          <th>Signed up</th>
+        </tr>
+      </thead>
+      <tbody id="signups-body">
+        <tr id="loading-row"><td colspan="4">Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <p>Lorebound waitlist — admin view</p>
+    <a href="/">← View landing page</a>
+  </footer>
+
+  <script>
+    let allSignups = [];
+
+    async function loadData() {
+      const tbody = document.getElementById('signups-body');
+      tbody.innerHTML = '<tr id="loading-row"><td colspan="4">Loading…</td></tr>';
+
+      try {
+        const res = await fetch('/api/signups');
+        if (!res.ok) throw new Error('Failed to load');
+        const data = await res.json();
+        allSignups = data.signups || [];
+
+        document.getElementById('total-count').textContent = data.count.toLocaleString();
+        document.getElementById('last-updated').textContent =
+          'Last updated ' + new Date().toLocaleTimeString();
+
+        renderTable(allSignups);
+      } catch (err) {
+        tbody.innerHTML = `<tr class="empty-row"><td colspan="4">Error loading data: ${err.message}</td></tr>`;
+      }
+    }
+
+    function renderTable(rows) {
+      const tbody = document.getElementById('signups-body');
+      document.getElementById('filtered-count').textContent = rows.length.toLocaleString();
+
+      if (rows.length === 0) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="4">No signups yet.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = rows.map(r => `
+        <tr>
+          <td class="td-id">${r.id}</td>
+          <td class="td-email">${escapeHtml(r.email)}</td>
+          <td class="td-name">${escapeHtml(r.name || '—')}</td>
+          <td class="td-date">${formatDate(r.created_at)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function formatDate(dt) {
+      if (!dt) return '—';
+      const d = new Date(dt + (dt.includes('Z') ? '' : 'Z'));
+      return d.toLocaleString(undefined, {
+        month: 'short', day: 'numeric', year: 'numeric',
+        hour: '2-digit', minute: '2-digit',
+      });
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function exportCSV() {
+      if (!allSignups.length) return;
+      const header = 'id,email,name,signed_up\n';
+      const rows = allSignups.map(r =>
+        `${r.id},"${r.email.replace(/"/g,'""')}","${(r.name||'').replace(/"/g,'""')}","${r.created_at}"`
+      ).join('\n');
+      const blob = new Blob([header + rows], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `lorebound-waitlist-${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // Search filter
+    document.getElementById('search').addEventListener('input', function() {
+      const q = this.value.toLowerCase();
+      const filtered = q
+        ? allSignups.filter(r =>
+            r.email.toLowerCase().includes(q) ||
+            (r.name || '').toLowerCase().includes(q)
+          )
+        : allSignups;
+      renderTable(filtered);
+    });
+
+    loadData();
+  </script>
+
+</body>
+</html>
